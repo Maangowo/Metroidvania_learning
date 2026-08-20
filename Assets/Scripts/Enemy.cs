@@ -11,6 +11,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected PlayerController player;
     [SerializeField] protected float speed;
 
+    [SerializeField] protected float damage;
+
     protected float recoilTimer;
     protected Rigidbody2D rb;
 
@@ -54,5 +56,18 @@ public class Enemy : MonoBehaviour
             rb.AddForce(-_hitForce * recoilFactor * _hitDirection);
             isRecoiling = true;
         }
+    }
+
+    protected void OnTriggerStay2D(Collider2D _other)
+    {
+        if(_other.CompareTag("Player") && !PlayerController.Instance.pState.invincible)
+        {
+            Attack();
+        }
+    }
+
+    protected virtual void Attack()
+    {
+        PlayerController.Instance.TakeDamage(damage);
     }
 }
